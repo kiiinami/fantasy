@@ -355,6 +355,17 @@ const Market = () => {
         return (b.playerMaster.points || 0) - (a.playerMaster.points || 0);
       case 'expiration':
         return new Date(a.expirationDate) - new Date(b.expirationDate);
+      case 'profitability': {
+        const getTrend = (p) => {
+          const trend = marketTrendsService.getPlayerMarketTrend(
+            p.playerMaster.nickname || p.playerMaster.name,
+            p.playerMaster.positionId,
+            p.playerMaster.team?.name
+          );
+          return trend ? trend.porcentaje : -999999;
+        };
+        return getTrend(b) - getTrend(a);
+      }
       default:
         return 0;
     }
@@ -554,6 +565,7 @@ const Market = () => {
               <option value="value">Valor</option>
               <option value="points">Puntos</option>
               <option value="expiration">Expiración</option>
+              <option value="profitability">Rentabilidad</option>
             </select>
           </div>
         </div>
